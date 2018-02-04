@@ -11,47 +11,51 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
 </head>
 <body>
-<p id='text4'>
-    fetching multireddit data...
-</p>
 <canvas id="myChart"></canvas>
-<script>
-    ctx = document.getElementById("myChart").getContext('2d');
-    myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["One", "Two"],
-            datasets: [{
-                label: '# of Subscribers',
-                data: [1, 2]
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                xAxes: [{
-                    gridLines: {
-                        display: false
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-</script>
 <script>
     reddit.multi(param('multi')).fetch(function (res) {
         teams = res.data.subreddits.map(x => x.name);
+        teamSubs = {};
+        ajaxCallsRemaining = teams.length;
         teams.forEach(function (team) {
             reddit.about(team).fetch(function (res2) {
-                $("#text4").append(team + ": " + res2.data.subscribers + ",   ");
+                teamSubs[team] = res2.data.subscribers;
+                --ajaxCallsRemaining;
+                if (ajaxCallsRemaining <= 0) {
+                    ctx = document.getElementById("myChart").getContext('2d');
+                    myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: _.keys(teamSubs),
+                            datasets: [{
+                                label: '# of Subscribers',
+                                data: _.values(teamSubs)
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        autoSkip: false,
+                                    }
+                                }],
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                }
             })
         });
     });
