@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta content="Pat Myron" name="author">
     <title>Multireddit Subscribers</title>
     <meta name="description" content="Number of subscribers for every subreddit in a multireddit">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdn.jsdelivr.net/npm/reddit.js@0.1.4/reddit.min.js"></script>
+    <script src="https://rawgit.com/PatMyron/reddit.js/master/reddit.js"></script>
     <script type="text/javascript" src="script.js"></script>
     <!--<link rel="stylesheet" href="style.css">-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -14,14 +15,16 @@
 <p id="text">
     fetching latest data...
 </p>
-<p id='text2'>
-    fetching parameter...
+<p id='text3'>
+    fetching multireddit data...
 </p>
 <script>
     reddit.about("notredame").fetch(function (res) {
         document.getElementById("text").innerHTML = res.data.subscribers;
     });
-    document.getElementById('text2').innerHTML = param('multi');
+    reddit.multi(param('multi')).fetch(function (res) {
+        document.getElementById('text3').innerHTML = res.data.subreddits.map(x => x.name)
+    });
 </script>
 </body>
 </html>
