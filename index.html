@@ -43,7 +43,7 @@
                 teamSubs[team] = res2.data.subscribers;
                 ajaxCallsRemaining--;
                 if (ajaxCallsRemaining <= 0) {
-                    document.title = 'Multireddit Subscribers | ' + res.split('/').pop();
+                    document.title = 'Multireddit Subscribers | ' + param('multi').split('/').pop();
                     $('#otherStuff').remove();
                     teamSubs = sortMap(teamSubs);
 
