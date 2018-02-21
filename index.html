@@ -14,8 +14,10 @@
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
 </head>
 <body>
-<div id="examples">
-    <p>Examples:</p>
+<div id="otherStuff">
+    Multireddit:<br>
+    <input type="text" placeholder="user/myroon5/m/mls" onchange="window.location.href = '?multi='+this.value">
+    <p>Or try out these examples:</p>
     <ul>
         <li><a href="?multi=user/myroon5/m/nfl">NFL teams</a></li>
         <li><a href="?multi=user/myroon5/m/nba">NBA teams</a></li>
@@ -41,7 +43,7 @@
                 teamSubs[team] = res2.data.subscribers;
                 ajaxCallsRemaining--;
                 if (ajaxCallsRemaining <= 0) {
-                    $('#examples').remove();
+                    $('#otherStuff').remove();
                     teamSubs = sortMap(teamSubs);
 
                     ctx = document.getElementById("myChart").getContext('2d');
