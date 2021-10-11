@@ -14,6 +14,10 @@ function sortMap(mapName) {
         .value();
 }
 
+function barClick(event, array){
+    window.open(`https://www.reddit.com/r/${array[0]._model.label}`, '_blank').focus();
+}
+
 reddit.multi(param('multi')).fetch(function (res) {
     teams = res.data.subreddits.map(x => x.name);
     teamSubs = {};
@@ -54,7 +58,8 @@ reddit.multi(param('multi')).fetch(function (res) {
                                     beginAtZero: true
                                 }
                             }]
-                        }
+                        },
+                        onClick: barClick
                     }
                 });
             }
