@@ -15,7 +15,7 @@ function sortMap(mapName) {
 }
 
 function barClick(event, array){
-    window.open(`https://www.reddit.com/r/${array[0]._model.label}`, '_blank').focus();
+    window.open(`https://old.reddit.com/r/${array[0]._model.label}`, '_blank').focus();
 }
 
 reddit.multi(param('multi')).fetch(function (res) {
