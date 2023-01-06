@@ -37,7 +37,7 @@ reddit.multi(param('multi')).fetch(function (res) {
                     data: {
                         labels: _.keys(teamSubs),
                         datasets: [{
-                            label: '# of Subscribers',
+                            label: '# of Subreddit Subscribers',
                             data: _.values(teamSubs)
                         }]
                     },
