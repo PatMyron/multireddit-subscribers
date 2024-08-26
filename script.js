@@ -15,7 +15,7 @@ function sortMap(mapName) {
 }
 
 function barClick(event, array){
-    window.open(`https://old.reddit.com/r/${array[0]._model.label}`, '_blank').focus();
+    window.open(`https://old.reddit.com/r/${array[0].element.$context.chart.data.labels[array[0].index]}`, '_blank').focus();
 }
 
 reddit.multi(param('multi')).fetch(function (res) {
@@ -45,19 +45,19 @@ reddit.multi(param('multi')).fetch(function (res) {
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
-                            xAxes: [{
-                                gridLines: {
+                            x: {
+                                grid: {
                                     display: false
                                 },
                                 ticks: {
                                     autoSkip: false,
                                 }
-                            }],
-                            yAxes: [{
+                            },
+                            y: {
                                 ticks: {
                                     beginAtZero: true
                                 }
-                            }]
+                            }
                         },
                         onClick: barClick
                     }
