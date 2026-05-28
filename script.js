@@ -18,6 +18,32 @@ function barClick(event, array){
     window.open(`https://old.reddit.com/r/${array[0].element.$context.chart.data.labels[array[0].index]}`, '_blank').focus();
 }
 
+function multiFromHref(href) {
+    return (href.split('multi=')[1] || '').split('&')[0];
+}
+
+function populateMultiOptions() {
+    const datalist = document.getElementById('multiOptions');
+    if (!datalist) {
+        return;
+    }
+
+    const seen = {};
+    Array.from(document.querySelectorAll('#otherStuff a[href^="?multi="]')).forEach(function (link) {
+        const multi = decodeURIComponent(multiFromHref(link.getAttribute('href')));
+        if (!multi || seen[multi]) {
+            return;
+        }
+
+        const option = document.createElement('option');
+        option.value = multi;
+        datalist.appendChild(option);
+        seen[multi] = true;
+    });
+}
+
+populateMultiOptions();
+
 reddit.multi(param('multi')).fetch(function (res) {
     teams = res.data.subreddits.map(x => x.name);
     teamSubs = {};
