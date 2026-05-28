@@ -18,12 +18,38 @@ function barClick(event, array){
     window.open(`https://old.reddit.com/r/${array[0].element.$context.chart.data.labels[array[0].index]}`, '_blank').focus();
 }
 
+const ABOUT_CACHE_TTL = 24 * 60 * 60 * 1000;
+
+function aboutCacheKey(team) {
+    return `multireddit-subscribers:about:${team.toLowerCase()}`;
+}
+
+function cachedAbout(team, callback) {
+    try {
+        const cached = JSON.parse(localStorage.getItem(aboutCacheKey(team)));
+        if (cached && Date.now() - cached.savedAt < ABOUT_CACHE_TTL) {
+            callback(cached.response);
+            return;
+        }
+    } catch (e) {}
+
+    reddit.about(team).fetch(function (res) {
+        try {
+            localStorage.setItem(aboutCacheKey(team), JSON.stringify({
+                savedAt: Date.now(),
+                response: res
+            }));
+        } catch (e) {}
+        callback(res);
+    });
+}
+
 reddit.multi(param('multi')).fetch(function (res) {
     teams = res.data.subreddits.map(x => x.name);
     teamSubs = {};
     ajaxCallsRemaining = teams.length;
     teams.forEach(function (team) {
-        reddit.about(team).fetch(function (res2) {
+        cachedAbout(team, function (res2) {
             teamSubs[team] = res2.data.subscribers;
             ajaxCallsRemaining--;
             if (ajaxCallsRemaining <= 0) {
