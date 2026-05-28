@@ -1,5 +1,5 @@
 function param(name) {
-    return (location.search.split(name + '=')[1] || '').split('&')[0];
+    return new URLSearchParams(location.search).get(name) || '';
 }
 
 function sortMap(mapName) {
